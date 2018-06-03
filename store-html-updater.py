@@ -26,11 +26,18 @@ with requests.Session() as s:
     Text = r.content.decode()
     soup = BeautifulSoup(Text, 'html.parser')
     if str(soup.find(id="npanchor")) != 'None':
-        neopoints = re.search(r'\>(.*?)\<',str(soup.find(id="npanchor"))).group(1)
-        time_str = re.search(r'\>(.*?)\<',str(soup.find(id="nst"))).group(1)
+        neopoints = re.search(
+            r'\>(.*?)\<', str(soup.find(id="npanchor"))).group(1)
+        time_str = re.search(r'\>(.*?)\<', str(soup.find(id="nst"))).group(1)
         print(neopoints + ' ' + time_str)
         f = open('X:\\User\\Documents\\store-html-updater\\shop.html', 'w')
         f.write(str(r.content))
         f.close()
+
+        for x in soup.find_all('a'):
+            try:
+                if 'Are you sure you wish to buy' in x['onclick']:
+                    print(x['onclick'])
+            except:pass
     else:
         print('Failed to log in.', flush=True)
